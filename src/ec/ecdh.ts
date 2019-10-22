@@ -12,7 +12,7 @@ export abstract class EcdhProvider extends EllipticProvider {
     publicKey: [],
   };
 
-  public namedCurves = ["P-256", "P-384", "P-521"];
+  public namedCurves = ["P-256", "P-384", "P-521", "Curve25519"];
 
   public checkAlgorithmParams(algorithm: EcdhKeyDeriveParams) {
     // public
@@ -29,5 +29,5 @@ export abstract class EcdhProvider extends EllipticProvider {
   }
 
   public abstract onDeriveBits(algorithm: EcdhKeyDeriveParams, baseKey: CryptoKey, length: number): Promise<ArrayBuffer>;
-
+  public abstract onDeriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
 }
