@@ -1,6 +1,6 @@
 import assert from "assert";
 import "reflect-metadata";
-import { EcdhProvider, EcdsaProvider, EllipticProvider } from "../src/ec";
+import { EcdhProvider, EcdsaProvider, EddsaProvider, EllipticProvider } from "../src/ec";
 import { OperationError } from "../src/errors";
 import { CryptoKey } from "../src/key";
 import { ProviderKeyUsages } from "../src/types";
@@ -130,6 +130,32 @@ context("EC", () => {
 
       it("correct `hash`", () => {
         provider.checkAlgorithmParams({ hash: { name: "SHA-1" } } as any);
+      });
+
+    });
+
+  });
+
+  context("EDDSA", () => {
+
+    const provider = Reflect.construct(EddsaProvider, []) as EddsaProvider;
+
+    context("checkAlgorithmParams", () => {
+
+      it("error if `hash` is missing", () => {
+        assert.throws(() => {
+          provider.checkAlgorithmParams({} as any);
+        }, Error);
+      });
+
+      it("error if `hash` has wrong value", () => {
+        assert.throws(() => {
+          provider.checkAlgorithmParams({ hash: { name: "wrong" } } as any);
+        }, OperationError);
+      });
+
+      it("correct `hash`", () => {
+        provider.checkAlgorithmParams({ hash: { name: "SHA-512" } } as any);
       });
 
     });

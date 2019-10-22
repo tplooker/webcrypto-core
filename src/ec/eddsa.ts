@@ -12,7 +12,7 @@ export abstract class EddsaProvider extends EllipticProvider {
     publicKey: ["verify"],
   };
 
-  public namedCurves = ["ed25519"];
+  public namedCurves = ["Curve25519"];
 
   public checkAlgorithmParams(algorithm: EddsaParams) {
     this.checkRequiredProperty(algorithm, "hash");
