@@ -139,7 +139,7 @@ export abstract class ProviderCrypto {
   //#endregion
 
   //#region Derive key
-  public async deriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<ArrayBuffer> {
+  public async deriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey> {
     this.checkDeriveKey.apply(this, arguments);
     return this.onDeriveKey.apply(this, arguments);
   }
@@ -158,7 +158,7 @@ export abstract class ProviderCrypto {
     }
     this.checkKeyUsages(keyUsages, allowedUsages);
   }
-  public async onDeriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<ArrayBuffer> {
+  public async onDeriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey> {
     throw new UnsupportedOperationError("deriveKey");
   }
   //#endregion
