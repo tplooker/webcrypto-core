@@ -138,6 +138,31 @@ export abstract class ProviderCrypto {
   }
   //#endregion
 
+  //#region Derive key
+  public async deriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<ArrayBuffer> {
+    this.checkDeriveKey.apply(this, arguments);
+    return this.onDeriveKey.apply(this, arguments);
+  }
+  public checkDeriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: KeyUsage[]) {
+    this.checkAlgorithmName(algorithm);
+    this.checkAlgorithmParams(algorithm);
+    this.checkCryptoKey(baseKey, "deriveKey");
+    if (!(keyUsages && keyUsages.length)) {
+      throw new TypeError(`Usages cannot be empty when deriving a key.`);
+    }
+    let allowedUsages: KeyUsages;
+    if (Array.isArray(this.usages)) {
+      allowedUsages = this.usages;
+    } else {
+      allowedUsages = this.usages.privateKey.concat(this.usages.publicKey); //TODO check this
+    }
+    this.checkKeyUsages(keyUsages, allowedUsages);
+  }
+  public async onDeriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<ArrayBuffer> {
+    throw new UnsupportedOperationError("deriveKey");
+  }
+  //#endregion
+
   //#region Export key
   public async exportKey(format: KeyFormat, key: CryptoKey): Promise<JsonWebKey | ArrayBuffer> {
     this.checkExportKey.apply(this, arguments);
